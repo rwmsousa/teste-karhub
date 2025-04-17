@@ -1,46 +1,48 @@
 services:
-  db:
-    container_name: ${DATABASE_NAME}
-    image: postgres:15
-    environment:
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
-    ports:
-      - '${DATABASE_PORT}:5432'
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    restart: always
-
-  app:
-    container_name: ${DOCKER_IMAGE_NAME}
+  api:
     build:
       context: .
       dockerfile: Dockerfile
-    command: npm run dev
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - PORT=${PORT}
-      - DATABASE_HOST=${DATABASE_HOST}
-      - DATABASE_PORT=${DATABASE_PORT}
-      - DATABASE_USER=${DATABASE_USER}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - DATABASE_NAME=${DATABASE_NAME}
-      - ADMIN_API_KEY=${ADMIN_API_KEY}
-      - DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME}
+    container_name: beer-styles-api
     ports:
-      - '3001:3001'
+      - "3001:3000"
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=beer_styles_db
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
+      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    networks:
+      - beer-network
+    command: sh -c "yarn build && yarn start:prod"
+
+  db:
+    image: postgres:latest
+    container_name: beer_styles_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: beer_styles_db
+    ports:
+      - "5433:5432"
     volumes:
-      - .:/app
-      - /app/node_modules
-    restart: always
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - beer-network
+
+networks:
+  beer-network:
+    driver: bridge
 
 volumes:
-  db_data:
+  postgres_data:

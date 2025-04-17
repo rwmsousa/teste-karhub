@@ -1,28 +1,15 @@
-FROM node:22.13-slim
+FROM node:22-slim
 
-RUN apt-get update && apt-get install -y wget gnupg
-
-# Adiciona postgresql ao repositório
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-
-# Instala o postgresql
-RUN apt-get update && apt-get install -y postgresql-client-15
-
-# Define o diretório de trabalho
 WORKDIR /app
 
-# Copia os arquivos de configuração
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
-# Instala as dependências do projeto
-RUN npm install
+RUN yarn install
 
-# Copia o restante dos arquivos do projeto
 COPY . .
 
-# Expõe a porta da aplicação
-EXPOSE 3001
+RUN yarn build
 
-# Comando para iniciar a aplicação
-CMD ["npm", "run", "dev"]
+EXPOSE 3000
+
+CMD ["yarn", "start:prod"]
