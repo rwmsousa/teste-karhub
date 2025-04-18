@@ -1,27 +1,39 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { BeerStyleController } from '../controllers/BeerStyleController';
+import { seedBeerStyles } from '../database/seeds/BeerStyleSeeder';
 
 const router = Router();
 const beerStyleController = new BeerStyleController();
 
-router.get('/', async (req: Request, res: Response) => {
-  await beerStyleController.index(req, res);
+// Rota para carregar dados iniciais
+router.post('/seed', async (req, res) => {
+  try {
+    await seedBeerStyles();
+    res.json({ message: 'Beer styles seeded successfully' });
+  } catch (error) {
+    console.error('Error seeding beer styles:', error);
+    res.status(500).json({ message: 'Error seeding beer styles' });
+  }
 });
 
-router.get('/:id', async (req: Request, res: Response) => {
-  await beerStyleController.show(req, res);
+router.get('/', (req, res) => {
+  beerStyleController.index(req, res);
 });
 
-router.post('/', async (req: Request, res: Response) => {
-  await beerStyleController.store(req, res);
+router.get('/:id', (req, res) => {
+  beerStyleController.show(req, res);
 });
 
-router.put('/:id', async (req: Request, res: Response) => {
-  await beerStyleController.update(req, res);
+router.post('/', (req, res) => {
+  beerStyleController.store(req, res);
 });
 
-router.delete('/:id', async (req: Request, res: Response) => {
-  await beerStyleController.delete(req, res);
+router.put('/:id', (req, res) => {
+  beerStyleController.update(req, res);
+});
+
+router.delete('/:id', (req, res) => {
+  beerStyleController.delete(req, res);
 });
 
 export default router;
