@@ -1,10 +1,23 @@
 import { AppDataSource } from '../config/database';
 import { TestDataSource } from '../config/test.database';
 import { BeerStyle } from '../entities/BeerStyle';
+import { SpotifyService } from './SpotifyService';
 
 interface StyleWithAverage {
   style: BeerStyle;
   averageTemp: number;
+}
+
+interface RecommendationResponse {
+  beerStyle: BeerStyle;
+  playlist: {
+    name: string;
+    tracks: Array<{
+      name: string;
+      artist: string;
+      link: string;
+    }>;
+  } | null;
 }
 
 export class BeerRecommendationService {
@@ -12,8 +25,11 @@ export class BeerRecommendationService {
     process.env.NODE_ENV === 'test'
       ? TestDataSource.getRepository(BeerStyle)
       : AppDataSource.getRepository(BeerStyle);
+  private spotifyService = new SpotifyService();
 
-  async recommendBeerStyle(temperature: number): Promise<BeerStyle> {
+  async recommendBeerStyle(
+    temperature: number,
+  ): Promise<RecommendationResponse> {
     const beerStyles = await this.beerStyleRepository.find();
 
     if (beerStyles.length === 0) {
@@ -45,8 +61,18 @@ export class BeerRecommendationService {
 
     // Se houver mais de um estilo com a mesma diferença de temperatura,
     // retorna o primeiro em ordem alfabética
-    return closestStyles.sort((a: BeerStyle, b: BeerStyle) =>
+    const recommendedStyle = closestStyles.sort((a: BeerStyle, b: BeerStyle) =>
       a.name.localeCompare(b.name),
     )[0];
+
+    // Busca a playlist no Spotify
+    const playlist = await this.spotifyService.searchPlaylist(
+      recommendedStyle.name,
+    );
+
+    return {
+      beerStyle: recommendedStyle,
+      playlist: playlist || null,
+    };
   }
 }

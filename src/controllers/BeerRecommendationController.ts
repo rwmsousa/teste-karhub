@@ -19,13 +19,20 @@ export class BeerRecommendationController {
         });
       }
 
-      const recommendedBeerStyle =
+      const recommendation =
         await this.beerRecommendationService.recommendBeerStyle(
           temperatureNumber,
         );
 
+      if (!recommendation.playlist) {
+        return res.status(404).json({
+          message: 'No playlist found for the recommended beer style',
+        });
+      }
+
       return res.json({
-        beerStyle: recommendedBeerStyle,
+        beerStyle: recommendation.beerStyle.name,
+        playlist: recommendation.playlist,
       });
     } catch (error) {
       const customError = error as CustomError;
