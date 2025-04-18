@@ -1,4 +1,5 @@
 import { AppDataSource } from '../config/database';
+import { TestDataSource } from '../config/test.database';
 import { BeerStyle } from '../entities/BeerStyle';
 
 interface BeerStyleWithAverage {
@@ -7,7 +8,10 @@ interface BeerStyleWithAverage {
 }
 
 export class BeerStyleService {
-  private beerStyleRepository = AppDataSource.getRepository(BeerStyle);
+  private beerStyleRepository =
+    process.env.NODE_ENV === 'test'
+      ? TestDataSource.getRepository(BeerStyle)
+      : AppDataSource.getRepository(BeerStyle);
 
   private calculateAverage(min: number, max: number): number {
     return (min + max) / 2;
@@ -20,8 +24,8 @@ export class BeerStyleService {
     const stylesWithAverage = styles.map((style) => ({
       beerStyle: style,
       average: this.calculateAverage(
-        style.minTemperature,
-        style.maxTemperature,
+        style.minimumTemperature,
+        style.maximumTemperature,
       ),
     }));
 
