@@ -39,8 +39,49 @@ A API estará disponível em `http://localhost:3001`
 
 ## Endpoints
 
-### POST /api/recommendation
+### Estilos de Cerveja (Beer Styles)
 
+#### GET /api/beer-styles
+Lista todos os estilos de cerveja disponíveis.
+
+#### GET /api/beer-styles/:id
+Retorna um estilo de cerveja específico pelo ID.
+
+#### POST /api/beer-styles
+Cria um novo estilo de cerveja.
+
+**Request:**
+```json
+{
+  "name": "Nome do Estilo",
+  "description": "Descrição do estilo",
+  "minimumTemperature": 0,
+  "maximumTemperature": 10
+}
+```
+
+#### PUT /api/beer-styles/:id
+Atualiza um estilo de cerveja existente.
+
+**Request:**
+```json
+{
+  "name": "Novo Nome",
+  "description": "Nova Descrição",
+  "minimumTemperature": 0,
+  "maximumTemperature": 10
+}
+```
+
+#### DELETE /api/beer-styles/:id
+Remove um estilo de cerveja.
+
+#### POST /api/beer-styles/seed
+Carrega dados iniciais de estilos de cerveja no banco de dados.
+
+### Recomendação
+
+#### POST /api/recommendation
 Recomenda um estilo de cerveja baseado na temperatura e retorna uma playlist do Spotify relacionada.
 
 **Request:**
@@ -53,19 +94,18 @@ Recomenda um estilo de cerveja baseado na temperatura e retorna uma playlist do 
 **Response:**
 ```json
 {
-  "beerStyle": "Weissbier",
+  "beerStyle": {
+    "name": "Nome do Estilo",
+    "description": "Descrição do estilo",
+    "minTemperature": 0,
+    "maxTemperature": 10
+  },
   "playlist": {
-    "name": "Biela Bier BigTrail - A Weissbier da Cervejaria Biela Bier",
+    "name": "Nome da Playlist",
     "tracks": [
       {
-        "name": "Learning To Fly",
-        "artist": "Tom Petty and the Heartbreakers",
-        "link": "https://open.spotify.com/track/51wdQRRr6ixzGQlE5l9Zwb"
-      },
-      {
-        "name": "Simple Life",
-        "artist": "Lynyrd Skynyrd",
-        "link": "https://open.spotify.com/track/7aBClm8lSq91Ji8hQgIcQY"
+        "name": "Nome da Música",
+        "artist": "Nome do Artista"
       }
     ]
   }
