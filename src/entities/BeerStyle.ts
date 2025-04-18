@@ -14,11 +14,14 @@ export class BeerStyle {
   @Column({ unique: true })
   name!: string;
 
-  @Column('float')
-  minTemperature!: number;
+  @Column({ nullable: true })
+  description!: string;
 
   @Column('float')
-  maxTemperature!: number;
+  minimumTemperature!: number;
+
+  @Column('float')
+  maximumTemperature!: number;
 
   @CreateDateColumn()
   createdAt!: Date;
