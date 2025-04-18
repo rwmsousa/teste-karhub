@@ -1,11 +1,11 @@
 import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
+import { AppDataSource } from './config/database';
 import beerStyleRoutes from './routes/beerStyle.routes';
 import beerRecommendationRoutes from './routes/beerRecommendation.routes';
-import { initializeApp } from './app';
 
-export const app = express();
+const app = express();
 
 // Middlewares
 app.use(cors());
@@ -54,15 +54,18 @@ app.use((req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+// Inicializar o banco de dados
+export const initializeApp = async () => {
+  try {
+    if (process.env.NODE_ENV !== 'test') {
+      await AppDataSource.initialize();
+      console.log('Database initialized successfully');
+    }
+    return app;
+  } catch (error) {
+    console.error('Error initializing database:', error);
+    throw error;
+  }
+};
 
-initializeApp()
-  .then((app) => {
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error('Failed to start server:', error);
-    process.exit(1);
-  });
+export { app };
