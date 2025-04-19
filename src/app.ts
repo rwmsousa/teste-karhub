@@ -9,20 +9,24 @@ import beerRecommendationRoutes from './routes/beerRecommendation.routes';
 import { initializeDatabase } from './database/init';
 
 const app = express();
-const port = Number(process.env.PORT) || 3000;
+const port = Number(process.env.PORT) || 3001;
 const host = '0.0.0.0';
 
 console.log('Starting server initialization...');
 console.log(`Server will listen on ${host}:${port}`);
 
-// Middlewares
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
-// Configuração do Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Rota raiz
 app.get('/', (req, res) => {
   console.log('Received request to root endpoint');
   res.json({
@@ -42,11 +46,9 @@ app.get('/', (req, res) => {
   });
 });
 
-// Registrar as rotas
 app.use('/api/beer-styles', beerStyleRoutes);
 app.use('/api', beerRecommendationRoutes);
 
-// Rota de fallback para 404
 app.use((req, res) => {
   console.log(`404 - Route not found: ${req.method} ${req.url}`);
   res.status(404).json({
@@ -67,7 +69,6 @@ app.use((req, res) => {
   });
 });
 
-// Error handling middleware
 app.use(
   (
     err: Error,
@@ -83,7 +84,6 @@ app.use(
   },
 );
 
-// Inicializar o banco de dados e iniciar o servidor
 console.log('Starting application...');
 initializeDatabase()
   .then(() => {
