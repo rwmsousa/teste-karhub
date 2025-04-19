@@ -4,8 +4,8 @@ API para recomendação de estilos de cerveja baseada na temperatura e integraç
 
 ## Requisitos
 
-- Docker e Docker Compose
-- Conta no Spotify Developer (para obter as credenciais da API)
+- [Docker e Docker Compose](https://docs.docker.com/get-started/get-docker/)
+- Conta no Spotify Developer (para [obter as credenciais da API](https://developer.spotify.com/documentation/web-api/tutorials/getting-started#create-an-app)
 
 ## Instalação e Execução
 
@@ -19,7 +19,7 @@ cd teste-karkub
 ```bash
 cp .env.example .env
 ```
-Edite o arquivo `.env` com suas credenciais do Spotify:
+Edite o arquivo `.env` com suas [credenciais do Spotify](https://developer.spotify.com/documentation/web-api/tutorials/getting-started#create-an-app):
 - `SPOTIFY_CLIENT_ID`: Seu Client ID do Spotify
 - `SPOTIFY_CLIENT_SECRET`: Seu Client Secret do Spotify
 
