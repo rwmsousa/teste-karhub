@@ -9,14 +9,13 @@ async function createDatabaseIfNotExists() {
     port: parseInt(process.env.DATABASE_PORT || '5432'),
     user: process.env.DATABASE_USER || 'postgres',
     password: process.env.DATABASE_PASSWORD || 'postgres',
-    database: 'postgres', // Conecta ao banco padrão postgres
+    database: 'postgres',
   });
 
   try {
     await client.connect();
     const dbName = process.env.DATABASE_NAME || 'beer_styles_db';
 
-    // Verifica se o banco existe
     const result = await client.query(
       `SELECT 1 FROM pg_database WHERE datname = $1`,
       [dbName],
@@ -24,7 +23,6 @@ async function createDatabaseIfNotExists() {
 
     if (result.rows.length === 0) {
       console.log(`Database ${dbName} does not exist, creating...`);
-      // Cria o banco de dados se não existir
       await client.query(`CREATE DATABASE ${dbName}`);
       console.log(`Database ${dbName} created successfully`);
     } else {
@@ -60,7 +58,6 @@ export async function initializeDatabase() {
   try {
     console.log('Starting database initialization...');
 
-    // Tenta criar o banco de dados primeiro
     await createDatabaseIfNotExists();
 
     const connected = await waitForDatabase();
