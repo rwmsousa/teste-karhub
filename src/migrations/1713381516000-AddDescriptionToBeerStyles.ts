@@ -1,18 +1,14 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddDescriptionToBeerStyles1713381516000
-  implements MigrationInterface
-{
+export class AddDescriptionToBeerStyles1713381516000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "beer_styles" ADD COLUMN "description" text`,
-    );
+    await queryRunner.query(`ALTER TABLE "beer_styles" ADD COLUMN "description" text`);
 
     await queryRunner.query(
-      `ALTER TABLE "beer_styles" ADD COLUMN "minimumTemperature" double precision`,
+      `ALTER TABLE "beer_styles" ADD COLUMN "minimumTemperature" double precision`
     );
     await queryRunner.query(
-      `ALTER TABLE "beer_styles" ADD COLUMN "maximumTemperature" double precision`,
+      `ALTER TABLE "beer_styles" ADD COLUMN "maximumTemperature" double precision`
     );
 
     await queryRunner.query(`
@@ -24,26 +20,18 @@ export class AddDescriptionToBeerStyles1713381516000
       WHERE "description" IS NULL
     `);
 
+    await queryRunner.query(`ALTER TABLE "beer_styles" ALTER COLUMN "description" SET NOT NULL`);
     await queryRunner.query(
-      `ALTER TABLE "beer_styles" ALTER COLUMN "description" SET NOT NULL`,
+      `ALTER TABLE "beer_styles" ALTER COLUMN "minimumTemperature" SET NOT NULL`
     );
     await queryRunner.query(
-      `ALTER TABLE "beer_styles" ALTER COLUMN "minimumTemperature" SET NOT NULL`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "beer_styles" ALTER COLUMN "maximumTemperature" SET NOT NULL`,
+      `ALTER TABLE "beer_styles" ALTER COLUMN "maximumTemperature" SET NOT NULL`
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "beer_styles" DROP COLUMN "description"`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "beer_styles" DROP COLUMN "minimumTemperature"`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "beer_styles" DROP COLUMN "maximumTemperature"`,
-    );
+    await queryRunner.query(`ALTER TABLE "beer_styles" DROP COLUMN "description"`);
+    await queryRunner.query(`ALTER TABLE "beer_styles" DROP COLUMN "minimumTemperature"`);
+    await queryRunner.query(`ALTER TABLE "beer_styles" DROP COLUMN "maximumTemperature"`);
   }
 }

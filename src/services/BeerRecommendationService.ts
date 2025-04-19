@@ -27,42 +27,35 @@ export class BeerRecommendationService {
       : AppDataSource.getRepository(BeerStyle);
   private spotifyService = new SpotifyService();
 
-  async recommendBeerStyle(
-    temperature: number,
-  ): Promise<RecommendationResponse> {
+  async recommendBeerStyle(temperature: number): Promise<RecommendationResponse> {
     const beerStyles = await this.beerStyleRepository.find();
 
     if (beerStyles.length === 0) {
       throw new Error('No beer style found for the given temperature');
     }
 
-    const stylesWithAverageTemp: StyleWithAverage[] = beerStyles.map(
-      (style: BeerStyle) => ({
-        style,
-        averageTemp: (style.minimumTemperature + style.maximumTemperature) / 2,
-      }),
-    );
+    const stylesWithAverageTemp: StyleWithAverage[] = beerStyles.map((style: BeerStyle) => ({
+      style,
+      averageTemp: (style.minimumTemperature + style.maximumTemperature) / 2,
+    }));
 
     const minDifference = Math.min(
       ...stylesWithAverageTemp.map((item: StyleWithAverage) =>
-        Math.abs(item.averageTemp - temperature),
-      ),
+        Math.abs(item.averageTemp - temperature)
+      )
     );
 
     const closestStyles = stylesWithAverageTemp
       .filter(
-        (item: StyleWithAverage) =>
-          Math.abs(item.averageTemp - temperature) === minDifference,
+        (item: StyleWithAverage) => Math.abs(item.averageTemp - temperature) === minDifference
       )
       .map((item: StyleWithAverage) => item.style);
 
     const recommendedStyle = closestStyles.sort((a: BeerStyle, b: BeerStyle) =>
-      a.name.localeCompare(b.name),
+      a.name.localeCompare(b.name)
     )[0];
 
-    const playlist = await this.spotifyService.searchPlaylist(
-      recommendedStyle.name,
-    );
+    const playlist = await this.spotifyService.searchPlaylist(recommendedStyle.name);
 
     return {
       beerStyle: recommendedStyle,

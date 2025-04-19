@@ -20,9 +20,7 @@ export class BeerRecommendationController {
       }
 
       const recommendation =
-        await this.beerRecommendationService.recommendBeerStyle(
-          temperatureNumber,
-        );
+        await this.beerRecommendationService.recommendBeerStyle(temperatureNumber);
 
       if (!recommendation.playlist) {
         return res.status(404).json({
@@ -37,9 +35,7 @@ export class BeerRecommendationController {
     } catch (error) {
       const customError = error as CustomError;
 
-      if (
-        customError.message === 'No beer style found for the given temperature'
-      ) {
+      if (customError.message === 'No beer style found for the given temperature') {
         return res.status(404).json({
           message: customError.message,
         });

@@ -6,8 +6,7 @@ const options: swaggerJsdoc.Options = {
     info: {
       title: 'Beer Styles API',
       version: '1.0.0',
-      description:
-        'API para gerenciamento de estilos de cerveja e recomendações',
+      description: 'API para gerenciamento de estilos de cerveja e recomendações',
     },
     servers: [
       {
@@ -19,12 +18,7 @@ const options: swaggerJsdoc.Options = {
       schemas: {
         BeerStyle: {
           type: 'object',
-          required: [
-            'name',
-            'description',
-            'minimumTemperature',
-            'maximumTemperature',
-          ],
+          required: ['name', 'description', 'minimumTemperature', 'maximumTemperature'],
           properties: {
             id: {
               type: 'string',
@@ -117,12 +111,7 @@ const options: swaggerJsdoc.Options = {
               'application/json': {
                 schema: {
                   type: 'object',
-                  required: [
-                    'name',
-                    'description',
-                    'minimumTemperature',
-                    'maximumTemperature',
-                  ],
+                  required: ['name', 'description', 'minimumTemperature', 'maximumTemperature'],
                   properties: {
                     name: {
                       type: 'string',
@@ -431,8 +420,7 @@ const options: swaggerJsdoc.Options = {
               },
             },
             '404': {
-              description:
-                'Nenhum estilo de cerveja encontrado para a temperatura informada',
+              description: 'Nenhum estilo de cerveja encontrado para a temperatura informada',
               content: {
                 'application/json': {
                   schema: {

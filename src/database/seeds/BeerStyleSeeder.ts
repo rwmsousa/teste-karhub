@@ -3,8 +3,7 @@ import { TestDataSource } from '../../config/test.database';
 import { BeerStyle } from '../../entities/BeerStyle';
 
 export async function seedBeerStyles() {
-  const dataSource =
-    process.env.NODE_ENV === 'test' ? TestDataSource : AppDataSource;
+  const dataSource = process.env.NODE_ENV === 'test' ? TestDataSource : AppDataSource;
   const beerStyleRepository = dataSource.getRepository(BeerStyle);
 
   const beerStyles = [
