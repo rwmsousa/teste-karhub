@@ -71,15 +71,17 @@ app.use((err: Error, req: express.Request, res: express.Response, _next: express
   });
 });
 
-initializeDatabase()
-  .then(() => {
-    app.listen(port, host, () => {
-      console.log(`✨ Server is running on http://${host}:${port}`);
+if (process.env.NODE_ENV !== 'test') {
+  initializeDatabase()
+    .then(() => {
+      app.listen(port, host, () => {
+        console.log(`✨ Server is running on http://${host}:${port}`);
+      });
+    })
+    .catch((error) => {
+      console.error('Failed to start server:', error);
+      process.exit(1);
     });
-  })
-  .catch((error) => {
-    console.error('Failed to start server:', error);
-    process.exit(1);
-  });
+}
 
 export { app };
