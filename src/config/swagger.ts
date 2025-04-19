@@ -14,14 +14,6 @@ const options: swaggerJsdoc.Options = {
         url: 'http://localhost:3001',
         description: 'Servidor de desenvolvimento (Docker)',
       },
-      {
-        url: 'http://localhost:3000',
-        description: 'Servidor de desenvolvimento (Local)',
-      },
-      {
-        url: '/',
-        description: 'Servidor atual',
-      },
     ],
     components: {
       schemas: {
