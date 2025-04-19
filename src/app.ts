@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
-import { AppDataSource } from './config/database';
 import { swaggerSpec } from './config/swagger';
 import beerStyleRoutes from './routes/beerStyle.routes';
 import beerRecommendationRoutes from './routes/beerRecommendation.routes';
@@ -18,7 +17,7 @@ app.use(
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
     credentials: true,
-  }),
+  })
 );
 app.use(express.json());
 
@@ -64,20 +63,13 @@ app.use((req, res) => {
   });
 });
 
-app.use(
-  (
-    err: Error,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ) => {
-    console.error('Unhandled error:', err);
-    res.status(500).json({
-      message: 'Internal server error',
-      error: process.env.NODE_ENV === 'development' ? err.message : undefined,
-    });
-  },
-);
+app.use((err: Error, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({
+    message: 'Internal server error',
+    error: process.env.NODE_ENV === 'development' ? err.message : undefined,
+  });
+});
 
 initializeDatabase()
   .then(() => {
