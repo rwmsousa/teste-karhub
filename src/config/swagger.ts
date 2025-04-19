@@ -365,7 +365,7 @@ const options: swaggerJsdoc.Options = {
                     temperature: {
                       type: 'number',
                       description: 'Temperatura em graus Celsius',
-                      example: 5,
+                      example: -1,
                     },
                   },
                 },
