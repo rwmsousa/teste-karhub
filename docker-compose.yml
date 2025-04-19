@@ -6,6 +6,9 @@ services:
     container_name: beer-styles-api
     ports:
       - "3001:3001"
+    volumes:
+      - .:/app
+      - /app/node_modules
     environment:
       - DATABASE_HOST=db
       - DATABASE_PORT=5432
@@ -15,12 +18,13 @@ services:
       - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
       - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
       - PORT=3001
+      - NODE_ENV=development
     depends_on:
       db:
         condition: service_healthy
     networks:
       - beer-network
-    command: sh -c "yarn build && yarn start:prod"
+    command: yarn dev
 
   db:
     image: postgres:latest
