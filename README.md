@@ -37,106 +37,58 @@ docker-compose -f docker-compose.dev.yml exec api yarn seed
 
 A API estará disponível em `http://localhost:3001`
 
-## Endpoints
+## Documentação da API
 
-### Estilos de Cerveja (Beer Styles)
+A documentação completa da API está disponível através do Swagger UI em:
 
-#### GET /api/beer-styles
-Lista todos os estilos de cerveja disponíveis.
-
-#### GET /api/beer-styles/:id
-Retorna um estilo de cerveja específico pelo ID.
-
-#### POST /api/beer-styles
-Cria um novo estilo de cerveja.
-
-**Request:**
-```json
-{
-  "name": "Nome do Estilo",
-  "description": "Descrição do estilo",
-  "minimumTemperature": 0,
-  "maximumTemperature": 10
-}
+```
+http://localhost:3001/api-docs
 ```
 
-#### PUT /api/beer-styles/:id
-Atualiza um estilo de cerveja existente.
+### Como usar o Swagger
 
-**Request:**
-```json
-{
-  "name": "Novo Nome",
-  "description": "Nova Descrição",
-  "minimumTemperature": 0,
-  "maximumTemperature": 10
-}
+1. Acesse a URL `http://localhost:3001/api-docs`
+2. Você verá uma interface interativa com todos os endpoints disponíveis
+3. Clique em qualquer endpoint para expandir e ver os detalhes
+4. Para testar um endpoint:
+   - Clique no botão "Try it out"
+   - Preencha os parâmetros necessários (se houver)
+   - Clique em "Execute"
+   - Veja a resposta do servidor
+
+### Endpoints disponíveis
+
+- `GET /api/beer-styles`: Lista todos os estilos de cerveja
+- `GET /api/beer-styles/:id`: Obtém um estilo de cerveja específico
+- `POST /api/beer-styles`: Cria um novo estilo de cerveja
+- `PUT /api/beer-styles/:id`: Atualiza um estilo de cerveja existente
+- `DELETE /api/beer-styles/:id`: Remove um estilo de cerveja
+- `POST /api/recommendation`: Obtém recomendações de cerveja baseadas na temperatura
+
+## Estrutura do Projeto
+
+```
+src/
+├── config/          # Configurações do projeto
+├── controllers/     # Controladores da API
+├── database/        # Configurações e seeds do banco de dados
+├── entities/        # Entidades do TypeORM
+├── routes/          # Rotas da API
+├── services/        # Serviços da aplicação
+└── app.ts           # Arquivo principal da aplicação
 ```
 
-#### DELETE /api/beer-styles/:id
-Remove um estilo de cerveja.
+## Tecnologias Utilizadas
 
-#### POST /api/beer-styles/seed
-Carrega dados iniciais de estilos de cerveja no banco de dados.
-
-### Recomendação
-
-#### POST /api/recommendation
-Recomenda um estilo de cerveja baseado na temperatura e retorna uma playlist do Spotify relacionada.
-
-**Request:**
-```json
-{
-  "temperature": -7
-}
-```
-
-**Response:**
-```json
-{
-  "beerStyle": {
-    "name": "Nome do Estilo",
-    "description": "Descrição do estilo",
-    "minTemperature": 0,
-    "maxTemperature": 10
-  },
-  "playlist": {
-    "name": "Nome da Playlist",
-    "tracks": [
-      {
-        "name": "Nome da Música",
-        "artist": "Nome do Artista"
-      }
-    ]
-  }
-}
-```
-
-**Códigos de Status:**
-- 200: Sucesso
-- 400: Temperatura inválida
-- 404: Nenhum estilo de cerveja encontrado ou nenhuma playlist encontrada
-- 500: Erro interno do servidor
-
-## Regras de Negócio
-
-1. Todo estilo de cerveja tem uma temperatura mínima e máxima
-2. O cálculo para selecionar o estilo de cerveja adequado é baseado na média das temperaturas mais próxima do input dado pela API
-3. Caso o resultado seja mais de um estilo de cerveja, o estilo é retornado em ordem alfabética
-4. Caso não tenha uma playlist que contenha o nome do estilo, retorna um HTTP Status 404
-
-## Testes
-
-Para executar os testes:
-```bash
-docker-compose -f docker-compose.dev.yml exec api yarn test
-```
-
-Para executar os testes com cobertura:
-```bash
-docker-compose -f docker-compose.dev.yml exec api yarn test:coverage
-```
+- Node.js
+- TypeScript
+- Express
+- TypeORM
+- PostgreSQL
+- Swagger UI
+- Docker
+- Docker Compose
 
 ## Licença
 
-ISC 
+MIT 
