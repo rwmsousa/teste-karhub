@@ -1,6 +1,42 @@
 import { AppDataSource } from '../config/database';
 import { seedBeerStyles } from './seeds/BeerStyleSeeder';
 import { BeerStyle } from '../entities/BeerStyle';
+import { Client } from 'pg';
+
+async function createDatabaseIfNotExists() {
+  const client = new Client({
+    host: process.env.DATABASE_HOST || 'db',
+    port: parseInt(process.env.DATABASE_PORT || '5432'),
+    user: process.env.DATABASE_USER || 'postgres',
+    password: process.env.DATABASE_PASSWORD || 'postgres',
+    database: 'postgres', // Conecta ao banco padrão postgres
+  });
+
+  try {
+    await client.connect();
+    const dbName = process.env.DATABASE_NAME || 'beer_styles_db';
+
+    // Verifica se o banco existe
+    const result = await client.query(
+      `SELECT 1 FROM pg_database WHERE datname = $1`,
+      [dbName],
+    );
+
+    if (result.rows.length === 0) {
+      console.log(`Database ${dbName} does not exist, creating...`);
+      // Cria o banco de dados se não existir
+      await client.query(`CREATE DATABASE ${dbName}`);
+      console.log(`Database ${dbName} created successfully`);
+    } else {
+      console.log(`Database ${dbName} already exists`);
+    }
+  } catch (error) {
+    console.error('Error creating database:', error);
+    throw error;
+  } finally {
+    await client.end();
+  }
+}
 
 async function waitForDatabase() {
   const maxAttempts = 10;
@@ -23,6 +59,10 @@ async function waitForDatabase() {
 export async function initializeDatabase() {
   try {
     console.log('Starting database initialization...');
+
+    // Tenta criar o banco de dados primeiro
+    await createDatabaseIfNotExists();
+
     const connected = await waitForDatabase();
     if (!connected) {
       throw new Error('Failed to connect to database after multiple attempts');

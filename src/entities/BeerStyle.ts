@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  Index,
 } from 'typeorm';
 
 @Entity('beer_styles')
@@ -11,7 +12,7 @@ export class BeerStyle {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
+  @Column({ unique: false })
   name!: string;
 
   @Column({ nullable: true })
