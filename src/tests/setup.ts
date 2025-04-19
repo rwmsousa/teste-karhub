@@ -1,7 +1,5 @@
 import { beforeAll, afterAll } from '@jest/globals';
 import { TestDataSource } from '../config/test.database';
-import { BeerStyle } from '../entities/BeerStyle';
-import { seedBeerStyles } from '../database/seeds/BeerStyleSeeder';
 
 beforeAll(async () => {
   try {
@@ -20,7 +18,7 @@ afterAll(async () => {
       await TestDataSource.destroy();
     }
   } catch (error) {
-    console.error('Error during test cleanup:', error);
+    console.error('Error during test teardown:', error);
     throw error;
   }
 });
