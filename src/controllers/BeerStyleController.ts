@@ -13,7 +13,7 @@ export class BeerStyleController {
     try {
       const beerStyles = await this.beerStyleRepository.find();
       res.json(beerStyles);
-    } catch (error) {
+    } catch {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
@@ -31,15 +31,14 @@ export class BeerStyleController {
       }
 
       res.json(beerStyle);
-    } catch (error) {
+    } catch {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
 
   async store(req: Request, res: Response): Promise<void> {
     try {
-      const { name, description, minimumTemperature, maximumTemperature } =
-        req.body;
+      const { name, description, minimumTemperature, maximumTemperature } = req.body;
 
       if (
         !name ||
@@ -51,18 +50,14 @@ export class BeerStyleController {
         return;
       }
 
-      if (
-        typeof minimumTemperature !== 'number' ||
-        typeof maximumTemperature !== 'number'
-      ) {
+      if (typeof minimumTemperature !== 'number' || typeof maximumTemperature !== 'number') {
         res.status(400).json({ message: 'Temperature must be a number' });
         return;
       }
 
       if (minimumTemperature > maximumTemperature) {
         res.status(400).json({
-          message:
-            'Minimum temperature cannot be greater than maximum temperature',
+          message: 'Minimum temperature cannot be greater than maximum temperature',
         });
         return;
       }
@@ -77,7 +72,7 @@ export class BeerStyleController {
       await this.beerStyleRepository.save(beerStyle);
 
       res.status(201).json(beerStyle);
-    } catch (error) {
+    } catch {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
@@ -85,8 +80,7 @@ export class BeerStyleController {
   async update(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const { name, description, minimumTemperature, maximumTemperature } =
-        req.body;
+      const { name, description, minimumTemperature, maximumTemperature } = req.body;
 
       const beerStyle = await this.beerStyleRepository.findOne({
         where: { id },
@@ -113,32 +107,22 @@ export class BeerStyleController {
         beerStyle.description = description;
       }
 
-      if (
-        minimumTemperature !== undefined ||
-        maximumTemperature !== undefined
-      ) {
-        if (
-          minimumTemperature === undefined ||
-          maximumTemperature === undefined
-        ) {
+      if (minimumTemperature !== undefined || maximumTemperature !== undefined) {
+        if (minimumTemperature === undefined || maximumTemperature === undefined) {
           res.status(400).json({
             message: 'Both minimum and maximum temperature must be provided',
           });
           return;
         }
 
-        if (
-          typeof minimumTemperature !== 'number' ||
-          typeof maximumTemperature !== 'number'
-        ) {
+        if (typeof minimumTemperature !== 'number' || typeof maximumTemperature !== 'number') {
           res.status(400).json({ message: 'Temperature must be a number' });
           return;
         }
 
         if (minimumTemperature > maximumTemperature) {
           res.status(400).json({
-            message:
-              'Minimum temperature cannot be greater than maximum temperature',
+            message: 'Minimum temperature cannot be greater than maximum temperature',
           });
           return;
         }
@@ -150,7 +134,7 @@ export class BeerStyleController {
       await this.beerStyleRepository.save(beerStyle);
 
       res.json(beerStyle);
-    } catch (error) {
+    } catch {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
@@ -171,7 +155,7 @@ export class BeerStyleController {
       await this.beerStyleRepository.remove(beerStyle);
 
       res.status(204).send();
-    } catch (error) {
+    } catch {
       res.status(500).json({ message: 'Internal server error' });
     }
   }

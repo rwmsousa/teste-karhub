@@ -11,6 +11,29 @@ interface Playlist {
   tracks: Track[];
 }
 
+interface SpotifyTrack {
+  track: {
+    name: string;
+    artists: Array<{ name: string }>;
+    external_urls: { spotify: string };
+  };
+}
+
+interface SpotifyPlaylist {
+  name: string;
+  id: string;
+}
+
+interface SpotifySearchResponse {
+  playlists: {
+    items: SpotifyPlaylist[];
+  };
+}
+
+interface SpotifyTracksResponse {
+  items: SpotifyTrack[];
+}
+
 export class SpotifyService {
   private readonly baseUrl = 'https://api.spotify.com/v1';
   private readonly clientId = process.env.SPOTIFY_CLIENT_ID;
@@ -32,11 +55,11 @@ export class SpotifyService {
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: `Basic ${Buffer.from(
-            `${this.clientId}:${this.clientSecret}`,
-          ).toString('base64')}`,
+          Authorization: `Basic ${Buffer.from(`${this.clientId}:${this.clientSecret}`).toString(
+            'base64'
+          )}`,
         },
-      },
+      }
     );
 
     const token = response.data.access_token;
@@ -51,7 +74,7 @@ export class SpotifyService {
   async searchPlaylist(query: string): Promise<Playlist | null> {
     try {
       const accessToken = await this.getAccessToken();
-      const response = await axios.get(`${this.baseUrl}/search`, {
+      const response = await axios.get<SpotifySearchResponse>(`${this.baseUrl}/search`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -65,7 +88,7 @@ export class SpotifyService {
       const playlist = response.data.playlists.items[0];
       if (!playlist) return null;
 
-      const tracksResponse = await axios.get(
+      const tracksResponse = await axios.get<SpotifyTracksResponse>(
         `${this.baseUrl}/playlists/${playlist.id}/tracks`,
         {
           headers: {
@@ -74,10 +97,10 @@ export class SpotifyService {
           params: {
             limit: 10,
           },
-        },
+        }
       );
 
-      const tracks = tracksResponse.data.items.map((item: any) => ({
+      const tracks = tracksResponse.data.items.map((item) => ({
         name: item.track.name,
         artist: item.track.artists[0].name,
         link: item.track.external_urls.spotify,

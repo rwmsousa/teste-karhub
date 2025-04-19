@@ -56,17 +56,12 @@ describe('Beer Style Routes', () => {
         maximumTemperature: 10,
       });
 
-      const response = await request(app).get(
-        `/api/beer-styles/${beerStyle.id}`,
-      );
+      const response = await request(app).get(`/api/beer-styles/${beerStyle.id}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('id', beerStyle.id);
       expect(response.body).toHaveProperty('name', beerStyle.name);
-      expect(response.body).toHaveProperty(
-        'description',
-        beerStyle.description,
-      );
+      expect(response.body).toHaveProperty('description', beerStyle.description);
     });
 
     it('should return 404 for non-existent beer style', async () => {
@@ -86,17 +81,12 @@ describe('Beer Style Routes', () => {
         maximumTemperature: 10,
       };
 
-      const response = await request(app)
-        .post('/api/beer-styles')
-        .send(newBeerStyle);
+      const response = await request(app).post('/api/beer-styles').send(newBeerStyle);
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('id');
       expect(response.body).toHaveProperty('name', newBeerStyle.name);
-      expect(response.body).toHaveProperty(
-        'description',
-        newBeerStyle.description,
-      );
+      expect(response.body).toHaveProperty('description', newBeerStyle.description);
     });
 
     it('should return 400 for invalid data', async () => {
@@ -105,9 +95,7 @@ describe('Beer Style Routes', () => {
         description: 'Invalid beer style',
       };
 
-      const response = await request(app)
-        .post('/api/beer-styles')
-        .send(invalidBeerStyle);
+      const response = await request(app).post('/api/beer-styles').send(invalidBeerStyle);
 
       expect(response.status).toBe(400);
     });
@@ -127,22 +115,15 @@ describe('Beer Style Routes', () => {
         description: 'Updated description',
       };
 
-      const response = await request(app)
-        .put(`/api/beer-styles/${beerStyle.id}`)
-        .send(updatedData);
+      const response = await request(app).put(`/api/beer-styles/${beerStyle.id}`).send(updatedData);
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('name', updatedData.name);
-      expect(response.body).toHaveProperty(
-        'description',
-        updatedData.description,
-      );
+      expect(response.body).toHaveProperty('description', updatedData.description);
     });
 
     it('should return 404 for non-existent beer style', async () => {
-      const response = await request(app)
-        .put('/api/beer-styles/99999')
-        .send({ name: 'Updated' });
+      const response = await request(app).put('/api/beer-styles/99999').send({ name: 'Updated' });
 
       expect(response.status).toBe(404);
     });
@@ -157,9 +138,7 @@ describe('Beer Style Routes', () => {
         maximumTemperature: 10,
       });
 
-      const response = await request(app).delete(
-        `/api/beer-styles/${beerStyle.id}`,
-      );
+      const response = await request(app).delete(`/api/beer-styles/${beerStyle.id}`);
 
       expect(response.status).toBe(204);
     });
