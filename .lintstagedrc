@@ -7,6 +7,6 @@
     "prettier --write"
   ],
   "*.test.{js,ts}": [
-    "yarn test --findRelatedTests"
+    "yarn test:staged"
   ]
 }
