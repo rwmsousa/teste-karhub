@@ -1,12 +1,10 @@
 {
   "*.{js,ts}": [
-    "eslint --fix",
-    "prettier --write"
+    "yarn lint:fix",
+    "yarn format",
+    "yarn test:staged"
   ],
   "*.{json,md}": [
-    "prettier --write"
-  ],
-  "*.test.{js,ts}": [
-    "yarn test:staged"
+    "yarn format"
   ]
 }
