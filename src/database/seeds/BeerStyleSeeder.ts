@@ -10,47 +10,63 @@ export async function seedBeerStyles() {
   const beerStyles = [
     {
       name: 'Weissbier',
-      description:
-        'Cerveja de trigo alemã, refrescante e com notas de banana e cravo',
-      minimumTemperature: 3,
+      description: 'Cerveja de trigo alemã tradicional',
+      minimumTemperature: -1,
+      maximumTemperature: 3,
+    },
+    {
+      name: 'Pilsens',
+      description: 'Cerveja clara e refrescante do tipo Pilsen',
+      minimumTemperature: -2,
+      maximumTemperature: 4,
+    },
+    {
+      name: 'Weizenbier',
+      description: 'Cerveja de trigo alemã',
+      minimumTemperature: -4,
       maximumTemperature: 6,
     },
     {
-      name: 'Pilsner',
-      description: 'Cerveja clara e refrescante com amargor pronunciado',
-      minimumTemperature: 4,
+      name: 'Red ale',
+      description: 'Cerveja ale avermelhada',
+      minimumTemperature: -5,
+      maximumTemperature: 5,
+    },
+    {
+      name: 'India pale ale',
+      description: 'India Pale Ale tradicional',
+      minimumTemperature: -6,
       maximumTemperature: 7,
     },
     {
       name: 'IPA',
-      description: 'India Pale Ale, cerveja amarga e aromática',
-      minimumTemperature: 5,
-      maximumTemperature: 8,
-    },
-    {
-      name: 'Stout',
-      description: 'Cerveja escura e encorpada com notas de café e chocolate',
-      minimumTemperature: 8,
-      maximumTemperature: 12,
-    },
-    {
-      name: 'Belgian Ale',
-      description: 'Cerveja belga complexa e frutada',
-      minimumTemperature: 6,
+      description: 'India Pale Ale moderna',
+      minimumTemperature: -7,
       maximumTemperature: 10,
+    },
+    {
+      name: 'Dunkel',
+      description: 'Cerveja escura alemã',
+      minimumTemperature: -8,
+      maximumTemperature: 2,
+    },
+    {
+      name: 'Imperial Stouts',
+      description: 'Cerveja escura e forte do tipo Imperial Stout',
+      minimumTemperature: -10,
+      maximumTemperature: 13,
+    },
+    {
+      name: 'Brown ale',
+      description: 'Cerveja ale de cor marrom',
+      minimumTemperature: 0,
+      maximumTemperature: 14,
     },
   ];
 
-  for (const beerStyle of beerStyles) {
-    const existingStyle = await beerStyleRepository.findOne({
-      where: { name: beerStyle.name },
-    });
+  await beerStyleRepository.clear();
 
-    if (!existingStyle) {
-      await beerStyleRepository.save(beerStyle);
-      console.log(`Beer style ${beerStyle.name} created successfully`);
-    } else {
-      console.log(`Beer style ${beerStyle.name} already exists, skipping`);
-    }
+  for (const beerStyle of beerStyles) {
+    await beerStyleRepository.save(beerStyle);
   }
 }
