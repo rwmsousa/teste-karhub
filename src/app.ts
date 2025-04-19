@@ -12,9 +12,6 @@ const app = express();
 const port = Number(process.env.PORT) || 3001;
 const host = '0.0.0.0';
 
-console.log('Starting server initialization...');
-console.log(`Server will listen on ${host}:${port}`);
-
 app.use(
   cors({
     origin: true,
@@ -28,7 +25,6 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (req, res) => {
-  console.log('Received request to root endpoint');
   res.json({
     message: 'Beer Styles API',
     endpoints: {
@@ -50,7 +46,6 @@ app.use('/api/beer-styles', beerStyleRoutes);
 app.use('/api', beerRecommendationRoutes);
 
 app.use((req, res) => {
-  console.log(`404 - Route not found: ${req.method} ${req.url}`);
   res.status(404).json({
     message: 'Endpoint not found',
     availableEndpoints: {
@@ -84,19 +79,10 @@ app.use(
   },
 );
 
-console.log('Starting application...');
 initializeDatabase()
   .then(() => {
     app.listen(port, host, () => {
       console.log(`✨ Server is running on http://${host}:${port}`);
-      console.log('Available routes:');
-      console.log('- GET /');
-      console.log('- GET /api/beer-styles');
-      console.log('- GET /api/beer-styles/:id');
-      console.log('- POST /api/beer-styles');
-      console.log('- PUT /api/beer-styles/:id');
-      console.log('- DELETE /api/beer-styles/:id');
-      console.log('- POST /api/recommendation');
     });
   })
   .catch((error) => {
