@@ -5,7 +5,6 @@ import { seedBeerStyles } from '../database/seeds/BeerStyleSeeder';
 const router = Router();
 const beerStyleController = new BeerStyleController();
 
-// Rota para carregar dados iniciais
 router.post('/seed', async (req, res) => {
   try {
     await seedBeerStyles();

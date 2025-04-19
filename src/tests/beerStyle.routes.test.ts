@@ -21,7 +21,6 @@ describe('Beer Style Routes', () => {
 
   describe('GET /api/beer-styles', () => {
     it('should return all beer styles', async () => {
-      // Create test beer styles
       await beerStyleRepository.save([
         {
           name: 'Style 1',
@@ -102,7 +101,7 @@ describe('Beer Style Routes', () => {
 
     it('should return 400 for invalid data', async () => {
       const invalidBeerStyle = {
-        name: '', // Invalid empty name
+        name: '',
         description: 'Invalid beer style',
       };
 

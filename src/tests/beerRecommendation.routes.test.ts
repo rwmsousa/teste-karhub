@@ -13,14 +13,12 @@ import { TestDataSource } from '../config/test.database';
 import { BeerStyle } from '../entities/BeerStyle';
 import { Repository } from 'typeorm';
 
-// Mock do SpotifyService
 jest.mock('../services/SpotifyService', () => {
   const mockSearchPlaylist = jest.fn();
   const mockSpotifyService = {
     searchPlaylist: mockSearchPlaylist,
   };
 
-  // Configurar o mock padrão para retornar uma playlist válida
   mockSearchPlaylist.mockImplementation(() =>
     Promise.resolve({
       name: 'Test Playlist',
@@ -67,7 +65,6 @@ describe('Beer Recommendation Routes', () => {
 
   describe('POST /api/recommendation', () => {
     it('should recommend a beer style and playlist based on temperature', async () => {
-      // Create a test beer style
       const testBeerStyle = await beerStyleRepository.save({
         name: 'Test Style',
         description: 'Test description',
@@ -113,7 +110,6 @@ describe('Beer Recommendation Routes', () => {
     });
 
     it('should return 404 when no playlist is found for the beer style', async () => {
-      // Create a test beer style
       await beerStyleRepository.save({
         name: 'Test Style',
         description: 'Test description',
@@ -121,7 +117,6 @@ describe('Beer Recommendation Routes', () => {
         maximumTemperature: 10,
       });
 
-      // Mock Spotify service to return null
       mockSpotifyService.searchPlaylist.mockResolvedValueOnce(null);
 
       const response = await request(app)
@@ -136,7 +131,6 @@ describe('Beer Recommendation Routes', () => {
     });
 
     it('should select beer style with average temperature closest to input', async () => {
-      // Style1: avg temp = 2.5
       const style1 = await beerStyleRepository.save({
         name: 'Dunkel',
         description: 'Dark German lager',
@@ -144,7 +138,6 @@ describe('Beer Recommendation Routes', () => {
         maximumTemperature: 5,
       });
 
-      // Style2: avg temp = 4.5
       const style2 = await beerStyleRepository.save({
         name: 'Weissbier',
         description: 'German wheat beer',
@@ -157,11 +150,10 @@ describe('Beer Recommendation Routes', () => {
         .send({ temperature: -2 });
 
       expect(response.status).toBe(200);
-      expect(response.body.beerStyle).toBe('Dunkel'); // Should choose Dunkel as it's closer to -2
+      expect(response.body.beerStyle).toBe('Dunkel');
     });
 
     it('should return beer styles in alphabetical order when multiple have the same average temperature', async () => {
-      // Both styles have average temp = 7.5
       const style1 = await beerStyleRepository.save({
         name: 'Pilsens',
         description: 'Czech lager',
@@ -181,11 +173,10 @@ describe('Beer Recommendation Routes', () => {
         .send({ temperature: 7.5 });
 
       expect(response.status).toBe(200);
-      expect(response.body.beerStyle).toBe('IPA'); // Should choose IPA as it comes first alphabetically
+      expect(response.body.beerStyle).toBe('IPA');
     });
 
     it('should handle multiple beer styles with same first letter by continuing alphabetical comparison', async () => {
-      // All styles have average temp = 7.5
       const style1 = await beerStyleRepository.save({
         name: 'Porter',
         description: 'Dark beer',
@@ -212,7 +203,7 @@ describe('Beer Recommendation Routes', () => {
         .send({ temperature: 7.5 });
 
       expect(response.status).toBe(200);
-      expect(response.body.beerStyle).toBe('Pale Ale'); // Should choose Pale Ale as it comes first alphabetically
+      expect(response.body.beerStyle).toBe('Pale Ale'); 
     });
   });
 });

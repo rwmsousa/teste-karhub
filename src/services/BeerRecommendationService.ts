@@ -36,7 +36,6 @@ export class BeerRecommendationService {
       throw new Error('No beer style found for the given temperature');
     }
 
-    // Calcula a média de temperatura e a diferença para cada estilo
     const stylesWithAverageTemp: StyleWithAverage[] = beerStyles.map(
       (style: BeerStyle) => ({
         style,
@@ -44,14 +43,12 @@ export class BeerRecommendationService {
       }),
     );
 
-    // Encontra a menor diferença de temperatura
     const minDifference = Math.min(
       ...stylesWithAverageTemp.map((item: StyleWithAverage) =>
         Math.abs(item.averageTemp - temperature),
       ),
     );
 
-    // Filtra os estilos com a menor diferença de temperatura
     const closestStyles = stylesWithAverageTemp
       .filter(
         (item: StyleWithAverage) =>
@@ -59,13 +56,10 @@ export class BeerRecommendationService {
       )
       .map((item: StyleWithAverage) => item.style);
 
-    // Se houver mais de um estilo com a mesma diferença de temperatura,
-    // retorna o primeiro em ordem alfabética
     const recommendedStyle = closestStyles.sort((a: BeerStyle, b: BeerStyle) =>
       a.name.localeCompare(b.name),
     )[0];
 
-    // Busca a playlist no Spotify
     const playlist = await this.spotifyService.searchPlaylist(
       recommendedStyle.name,
     );

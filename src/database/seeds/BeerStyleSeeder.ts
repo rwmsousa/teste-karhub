@@ -41,14 +41,11 @@ export async function seedBeerStyles() {
     },
   ];
 
-  // Para cada estilo de cerveja
   for (const beerStyle of beerStyles) {
-    // Verifica se já existe um estilo com o mesmo nome
     const existingStyle = await beerStyleRepository.findOne({
       where: { name: beerStyle.name },
     });
 
-    // Se não existir, insere o novo estilo
     if (!existingStyle) {
       await beerStyleRepository.save(beerStyle);
       console.log(`Beer style ${beerStyle.name} created successfully`);

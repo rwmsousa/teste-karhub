@@ -4,12 +4,10 @@ export class AddDescriptionToBeerStyles1713381516000
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Primeiro, adicionamos a coluna description como nullable
     await queryRunner.query(
       `ALTER TABLE "beer_styles" ADD COLUMN "description" text`,
     );
 
-    // Adicionamos as colunas de temperatura como nullable inicialmente
     await queryRunner.query(
       `ALTER TABLE "beer_styles" ADD COLUMN "minimumTemperature" double precision`,
     );
@@ -17,7 +15,6 @@ export class AddDescriptionToBeerStyles1713381516000
       `ALTER TABLE "beer_styles" ADD COLUMN "maximumTemperature" double precision`,
     );
 
-    // Atualizamos os registros existentes com valores padrão
     await queryRunner.query(`
       UPDATE "beer_styles"
       SET
@@ -27,7 +24,6 @@ export class AddDescriptionToBeerStyles1713381516000
       WHERE "description" IS NULL
     `);
 
-    // Agora podemos tornar as colunas NOT NULL
     await queryRunner.query(
       `ALTER TABLE "beer_styles" ALTER COLUMN "description" SET NOT NULL`,
     );
