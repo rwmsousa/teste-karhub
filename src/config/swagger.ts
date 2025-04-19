@@ -11,8 +11,16 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
+        url: 'http://localhost:3001',
+        description: 'Servidor de desenvolvimento (Docker)',
+      },
+      {
         url: 'http://localhost:3000',
-        description: 'Servidor de desenvolvimento',
+        description: 'Servidor de desenvolvimento (Local)',
+      },
+      {
+        url: '/',
+        description: 'Servidor atual',
       },
     ],
     components: {
@@ -35,23 +43,23 @@ const options: swaggerJsdoc.Options = {
             name: {
               type: 'string',
               description: 'Nome do estilo de cerveja',
-              example: 'IPA',
+              example: 'Stout',
             },
             description: {
               type: 'string',
               description: 'Descrição do estilo de cerveja',
               example:
-                'India Pale Ale é um estilo de cerveja conhecido pelo seu sabor amargo e aroma intenso de lúpulo',
+                'Cerveja escura e encorpada, com notas pronunciadas de café, chocolate e malte torrado. Apresenta espuma cremosa e persistente, com coloração marrom clara.',
             },
             minimumTemperature: {
               type: 'number',
               description: 'Temperatura mínima recomendada em graus Celsius',
-              example: 4,
+              example: 6,
             },
             maximumTemperature: {
               type: 'number',
               description: 'Temperatura máxima recomendada em graus Celsius',
-              example: 6,
+              example: 8,
             },
             createdAt: {
               type: 'string',
@@ -126,20 +134,20 @@ const options: swaggerJsdoc.Options = {
                   properties: {
                     name: {
                       type: 'string',
-                      example: 'IPA',
+                      example: 'Porter',
                     },
                     description: {
                       type: 'string',
                       example:
-                        'India Pale Ale é um estilo de cerveja conhecido pelo seu sabor amargo e aroma intenso de lúpulo',
+                        'Cerveja escura inglesa, com sabores robustos de malte torrado, notas de chocolate amargo, café e caramelo. Apresenta corpo médio e espuma densa e cremosa.',
                     },
                     minimumTemperature: {
                       type: 'number',
-                      example: 4,
+                      example: 7,
                     },
                     maximumTemperature: {
                       type: 'number',
-                      example: 6,
+                      example: 10,
                     },
                   },
                 },
@@ -255,20 +263,20 @@ const options: swaggerJsdoc.Options = {
                   properties: {
                     name: {
                       type: 'string',
-                      example: 'IPA',
+                      example: 'Stout',
                     },
                     description: {
                       type: 'string',
                       example:
-                        'India Pale Ale é um estilo de cerveja conhecido pelo seu sabor amargo e aroma intenso de lúpulo',
+                        'Cerveja escura e encorpada, com notas pronunciadas de café, chocolate e malte torrado. Apresenta espuma cremosa e persistente, com coloração marrom clara.',
                     },
                     minimumTemperature: {
                       type: 'number',
-                      example: 4,
+                      example: 6,
                     },
                     maximumTemperature: {
                       type: 'number',
-                      example: 6,
+                      example: 8,
                     },
                   },
                 },
@@ -394,7 +402,7 @@ const options: swaggerJsdoc.Options = {
                       beerStyle: {
                         type: 'string',
                         description: 'Nome do estilo de cerveja recomendado',
-                        example: 'IPA',
+                        example: 'Stout',
                       },
                       playlist: {
                         type: 'object',
