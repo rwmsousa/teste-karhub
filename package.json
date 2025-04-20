@@ -1,7 +1,6 @@
 {
   "name": "teste-karhub",
   "version": "1.0.0",
-  "type": "module",
   "main": "dist/index.js",
   "engines": {
     "node": ">=22.13.0",
@@ -18,8 +17,8 @@
     "test:coverage": "jest --coverage",
     "seed": "ts-node src/scripts/seed.ts",
     "prepare": "husky",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix",
+    "lint": "eslint . --ext .ts --config eslint.config.cjs",
+    "lint:fix": "eslint . --ext .ts --fix --config eslint.config.cjs",
     "format": "prettier --write \"src/**/*.{ts,json}\"",
     "test:staged": "jest --findRelatedTests",
     "postinstall": "husky install"
@@ -38,6 +37,8 @@
     "@types/node": "^22.10.7",
     "@types/pg": "^8.11.13",
     "@types/supertest": "^6.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.30.1",
+    "@typescript-eslint/parser": "^8.30.1",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
