@@ -1,22 +1,22 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
-export default {
+module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  setupFilesAfterEnv: ['./src/tests/setup.ts'],
+  roots: ['<rootDir>/src'],
   testMatch: ['**/*.test.ts'],
-  moduleFileExtensions: ['ts', 'js'],
   transform: {
-    '^.+\\.ts$': [
-      'ts-jest',
-      {
-        tsconfig: 'tsconfig.json',
-      },
-    ],
+    '^.+\\.tsx?$': 'ts-jest',
   },
-  testTimeout: 10000,
-  globals: {
-    NODE_ENV: 'test',
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
-  detectOpenHandles: true,
-  forceExit: true,
+  setupFilesAfterEnv: ['<rootDir>/src/tests/setup.ts'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/*.test.{ts,tsx}',
+    '!src/tests/**/*',
+  ],
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov'],
 };
