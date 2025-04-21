@@ -30,11 +30,6 @@ docker-compose -f docker-compose.dev.yml up -d
 
 4. Aguarde a inicialização completa do banco de dados (o serviço db tem um healthcheck que garante que o banco está pronto)
 
-5. Execute o seed do banco de dados:
-```bash
-docker-compose -f docker-compose.dev.yml exec api yarn seed
-```
-
 A API estará disponível em `http://localhost:3001`
 
 ## Documentação da API
